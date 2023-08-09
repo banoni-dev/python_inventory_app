@@ -1,4 +1,7 @@
 import customtkinter
+import customtkinter as tk
+import pieces_forms
+import commandes_forms
 import os
 from PIL import Image
 
@@ -42,7 +45,7 @@ class App(customtkinter.CTk):
         # create navigation frame
         self.navigation_frame = customtkinter.CTkFrame(self, corner_radius=0)
         self.navigation_frame.grid(row=0, column=0, sticky="nsew")
-        self.navigation_frame.grid_rowconfigure(4, weight=1)
+        self.navigation_frame.grid_rowconfigure(6, weight=1)
 
         self.navigation_frame_label = customtkinter.CTkLabel(self.navigation_frame, text="GAPR",text_color=blue_color,
                                                              compound="left", font=customtkinter.CTkFont(size=16, weight="bold"))
@@ -50,18 +53,20 @@ class App(customtkinter.CTk):
 
         self.home_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=60, border_spacing=10, text="Tableau de bord",
                                                    fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                                   image=self.home_image, anchor="w", command=self.home_button_event)
+                                                   image=self.home_image, anchor="w", command=self.home_event)
         self.home_button.grid(row=1, column=0, sticky="ew")
 
         self.frame_2_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=60, border_spacing=10, text="gestion des stocks",
                                                       fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                                      image=self.chat_image, anchor="w", command=self.frame_2_button_event)
+                                                      image=self.chat_image, anchor="w")
         self.frame_2_button.grid(row=2, column=0, sticky="ew")
+        self.frame_2_button.bind("<Button-1>", self.toggle_submenu_1)
 
         self.frame_3_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=60, border_spacing=10, text="gestion des commandes",
                                                       fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                                      image=self.add_user_image, anchor="w", command=self.frame_3_button_event)
-        self.frame_3_button.grid(row=3, column=0, sticky="ew")
+                                                      image=self.add_user_image, anchor="w")
+        self.frame_3_button.grid(row=4, column=0, sticky="ew")
+        self.frame_3_button.bind("<Button-1>", self.toggle_submenu_2)
 
 
         # create home frame
@@ -71,37 +76,155 @@ class App(customtkinter.CTk):
         self.home_frame_large_image_label.grid(row=0, column=0, padx=20, pady=40)
 
 
-        # create second frame
-        self.second_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
-        self.second_frame.grid_columnconfigure(0, weight=1)
-        self.second_frame_label = customtkinter.CTkLabel(self.second_frame,font=("Arial", 20),text_color=blue_color, text="gestion des stocks".upper())
-        self.second_frame_label.grid(row=0, column=0, padx=20, pady=40)
+        # create ajouter_p_frame 
+        pieces_forms.ajouter_fun(self)
 
-        # create third frame
-        self.third_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
-        self.third_frame.grid_columnconfigure(0, weight=1)
-        self.third_frame_label = customtkinter.CTkLabel(self.third_frame,font=("Arial", 20),text_color=blue_color, text="gestion des commandes".upper())
-        self.third_frame_label.grid(row=0, column=0, padx=20, pady=40)
+        # create liste_p_frame 
+        pieces_forms.liste_fun(self)
+
+
+
+        # create supprimer_p_frame 
+        pieces_forms.supprimer_fun(self)
+
+
+        # create modifier_p_frame 
+        pieces_forms.modifier_fun(self)
+       
+
+        # create rechercher_p_frame 
+
+        pieces_forms.rechercher_fun(self)
+
+##################################################################################################################################
+#=================================================================================================================================
+
+             # create ajouter_c_frame 
+        commandes_forms.ajouter_fun(self)
+
+        # create liste_c_frame 
+        commandes_forms.liste_fun(self)
+
+
+
+        # create supprimer_c_frame 
+        commandes_forms.supprimer_fun(self)
+
+
+        # create modifier_c_frame 
+        commandes_forms.modifier_fun(self)
+       
+
+        # create rechercher_c_frame 
+
+        commandes_forms.rechercher_fun(self)
+
+
+
         # select default frame
-        self.select_frame_by_name("home")
+
+
+# Create the sub-menu options (hidden by default)
+        self.submenu_frame_1 = customtkinter.CTkFrame(self.navigation_frame, fg_color="gray50")
+
+        self.submenu_frame_1.grid(row=0, column=0, sticky="ew")
+        self.submenu_frame_1.grid_forget()
+
+        self.sub1_option_1 = customtkinter.CTkButton(self.submenu_frame_1, corner_radius=0, width=200, height=60, border_spacing=15,
+                                                   text="listes des pieces", fg_color="transparent",
+                                                   text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"), anchor="w", command=self.liste_p_event)
+        self.sub1_option_1.grid(row=0, column=0, sticky="ew")
+
+
+        self.sub1_option_2 = customtkinter.CTkButton(self.submenu_frame_1, corner_radius=0, width=200, height=60, border_spacing=15,
+                                                   text="Ajouter", fg_color="transparent",
+                                                   text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"), anchor="w", command=self.ajouter_p_event)
+        self.sub1_option_2.grid(row=1, column=0, sticky="ew")
+        
+        self.sub1_option_3 = customtkinter.CTkButton(self.submenu_frame_1, corner_radius=0, width=200, height=60, border_spacing=15,
+                                                   text="modifier", fg_color="transparent",
+                                                   text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"), anchor="w", command=self.modifier_p_event)
+        self.sub1_option_3.grid(row=2, column=0, sticky="ew")
+        
+        self.sub1_option_4 = customtkinter.CTkButton(self.submenu_frame_1, corner_radius=0, width=200, height=60, border_spacing=15,
+                                                   text="supprimer", fg_color="transparent",
+                                                   text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"), anchor="w", command=self.supprimer_p_event)
+        self.sub1_option_4.grid(row=3, column=0, sticky="ew")
+        
+        self.sub1_option_5 = customtkinter.CTkButton(self.submenu_frame_1, corner_radius=0, width=200, height=60, border_spacing=15,
+                                                   text="rechercher", fg_color="transparent",
+                                                   text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"), anchor="w", command=self.rechercher_p_event)
+        self.sub1_option_5.grid(row=4, column=0, sticky="ew")
+
+
+        # Create the sub-menu options (hidden by default)
+       
+        self.submenu_frame_2 = customtkinter.CTkFrame(self.navigation_frame, fg_color="gray50")
+
+        self.submenu_frame_2.grid(row=0, column=0, sticky="ew")
+        self.submenu_frame_2.grid_forget()
+
+        self.sub2_option_1 = customtkinter.CTkButton(self.submenu_frame_2, corner_radius=0, width=200, height=60, border_spacing=15,
+                                                   text="listes des commandes", fg_color="transparent",
+                                                   text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"), anchor="w", command=self.liste_c_event)
+        self.sub2_option_1.grid(row=0, column=0, sticky="ew")
+
+
+        self.sub2_option_2 = customtkinter.CTkButton(self.submenu_frame_2, corner_radius=0, width=200, height=60, border_spacing=15,
+                                                   text="Ajouter", fg_color="transparent",
+                                                   text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"), anchor="w", command=self.ajouter_c_event)
+        self.sub2_option_2.grid(row=1, column=0, sticky="ew")
+        
+        self.sub2_option_3 = customtkinter.CTkButton(self.submenu_frame_2, corner_radius=0, width=200, height=60, border_spacing=15,
+                                                   text="modifier", fg_color="transparent",
+                                                   text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"), anchor="w", command=self.modifier_c_event)
+        self.sub1_option_3.grid(row=2, column=0, sticky="ew")
+        
+        self.sub2_option_4 = customtkinter.CTkButton(self.submenu_frame_2, corner_radius=0, width=200, height=60, border_spacing=15,
+                                                   text="supprimer", fg_color="transparent",
+                                                   text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"), anchor="w", command=self.supprimer_c_event)
+        self.sub2_option_4.grid(row=3, column=0, sticky="ew")
+        
+        self.sub2_option_5 = customtkinter.CTkButton(self.submenu_frame_2, corner_radius=0, width=200, height=60, border_spacing=15,
+                                                   text="rechercher", fg_color="transparent",
+                                                   text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"), anchor="w", command=self.rechercher_c_event)
+        self.sub2_option_5.grid(row=4, column=0, sticky="ew")
+
+    def toggle_submenu_1(self, event):
+        if self.submenu_frame_1.winfo_ismapped():
+            self.submenu_frame_1.grid_forget()
+        else:
+            self.submenu_frame_1.grid(row=3, column=0, sticky="ew")
+            self.frame_2_button.grid(row=2, column=0, sticky="ew")
+    def toggle_submenu_2(self, event):
+        if self.submenu_frame_2.winfo_ismapped():
+            self.submenu_frame_2.grid_forget()
+        else:
+            self.submenu_frame_2.grid(row=5, column=0, sticky="ew")
+            self.frame_3_button.grid(row=4, column=0, sticky="ew")
+
+
+
+
+
 
     def select_frame_by_name(self, name):
         # set button color for selected button
        # Assuming name holds the button's identifier ("home", "frame_2", "frame_3")
-        if name == "home":
-            self.home_button.configure(fg_color=("gray75", "gray25"), text_color="#5cafe7")
-        else:
-            self.home_button.configure(fg_color=("transparent"), text_color=("white"))
+        # if name == "home":
+        #     self.home_button.configure(fg_color=("gray75", "gray25"), text_color="#5cafe7")
+        # else:
+        #     self.home_button.configure(fg_color=("transparent"), text_color=("white"))
 
-        if name == "frame_2":
-            self.frame_2_button.configure(fg_color=("gray75", "gray25"), text_color="#5cafe7")
-        else:
-            self.frame_2_button.configure(fg_color=("transparent"), text_color=("white"))
+        # if name == "frame_2":
+        #     self.frame_2_button.configure(fg_color=("gray75", "gray25"), text_color="#5cafe7")
+        # else:
+        #     self.frame_2_button.configure(fg_color=("transparent"), text_color=("white"))
 
-        if name == "frame_3":
-            self.frame_3_button.configure(fg_color=("gray75", "gray25"), text_color="#5cafe7")
-        else:
-            self.frame_3_button.configure(fg_color=("transparent"), text_color=("white"))
+        # if name == "frame_3":
+        #     self.frame_3_button.configure(fg_color=("gray75", "gray25"), text_color="#5cafe7")
+        # else:
+        #     self.frame_3_button.configure(fg_color=("transparent"), text_color=("white"))
 
 
 
@@ -110,23 +233,75 @@ class App(customtkinter.CTk):
             self.home_frame.grid(row=0, column=1, sticky="nsew")
         else:
             self.home_frame.grid_forget()
-        if name == "frame_2":
-            self.second_frame.grid(row=0, column=1, sticky="nsew")
+        if name == "liste_p_frame":
+            self.liste_p_frame.grid(row=0, column=1, sticky="nsew")
         else:
-            self.second_frame.grid_forget()
-        if name == "frame_3":
-            self.third_frame.grid(row=0, column=1, sticky="nsew")
+            self.liste_p_frame.grid_forget()
+        if name == "ajouter_p_frame":
+            self.ajouter_p_frame.grid(row=0, column=1, sticky="nsew")
         else:
-            self.third_frame.grid_forget()
+            self.ajouter_p_frame.grid_forget()
+        if name == "supprimer_p_frame":
+            self.supprimer_p_frame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.supprimer_p_frame.grid_forget()
+        if name == "modifier_p_frame":
+            self.modifier_p_frame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.modifier_p_frame.grid_forget()
+        if name == "rechercher_p_frame":
+            self.rechercher_p_frame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.rechercher_p_frame.grid_forget()
+        if name == "liste_c_frame":
+            self.liste_c_frame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.liste_c_frame.grid_forget()
+        if name == "ajouter_c_frame":
+            self.ajouter_c_frame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.ajouter_c_frame.grid_forget()
+        if name == "supprimer_c_frame":
+            self.supprimer_c_frame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.supprimer_c_frame.grid_forget()
+        if name == "modifier_c_frame":
+            self.modifier_c_frame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.modifier_c_frame.grid_forget()
+        if name == "rechercher_c_frame":
+            self.rechercher_c_frame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.rechercher_c_frame.grid_forget()
 
-    def home_button_event(self):
+
+    def home_event(self):
         self.select_frame_by_name("home")
 
-    def frame_2_button_event(self):
-        self.select_frame_by_name("frame_2")
+    def liste_p_event(self):
+        self.select_frame_by_name("liste_p_frame")
+    def ajouter_p_event(self):
+        self.select_frame_by_name("ajouter_p_frame")
+    def modifier_p_event(self):
+        self.select_frame_by_name("modifier_p_frame")
+    def supprimer_p_event(self):
+        self.select_frame_by_name("supprimer_p_frame")
+    def rechercher_p_event(self):
+        self.select_frame_by_name("rechercher_p_frame")
 
-    def frame_3_button_event(self):
-        self.select_frame_by_name("frame_3")
+
+    def liste_c_event(self):
+        self.select_frame_by_name("liste_c_frame")
+    def ajouter_c_event(self):
+        self.select_frame_by_name("ajouter_c_frame")
+    def modifier_c_event(self):
+        self.select_frame_by_name("modifier_c_frame")
+    def supprimer_c_event(self):
+        self.select_frame_by_name("supprimer_c_frame")
+    def rechercher_c_event(self):
+        self.select_frame_by_name("rechercher_c_frame")
+
+
 
     
 

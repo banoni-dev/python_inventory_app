@@ -156,7 +156,7 @@ class LoginPage:
         self.password_entry.config(show='*')
     def login_func(self):
         if(True):
-            subprocess.call(["python", "dashboard.py"])
+            print(self.username_entry.get(),self.password_entry.get())
         
 
 
