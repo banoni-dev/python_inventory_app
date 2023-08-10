@@ -1,6 +1,7 @@
 import customtkinter
 import customtkinter as tk
 import pieces_forms
+import add_user
 import commandes_forms
 import os
 from PIL import Image
@@ -13,7 +14,6 @@ class App(customtkinter.CTk):
 
         self.title("GAPR")
         self.resizable(1,1)
-        
         screen_width = self.winfo_screenwidth()
         screen_height = self.winfo_screenheight()
 
@@ -45,7 +45,7 @@ class App(customtkinter.CTk):
         # create navigation frame
         self.navigation_frame = customtkinter.CTkFrame(self, corner_radius=0)
         self.navigation_frame.grid(row=0, column=0, sticky="nsew")
-        self.navigation_frame.grid_rowconfigure(6, weight=1)
+        self.navigation_frame.grid_rowconfigure(7, weight=1)
 
         self.navigation_frame_label = customtkinter.CTkLabel(self.navigation_frame, text="GAPR",text_color=blue_color,
                                                              compound="left", font=customtkinter.CTkFont(size=16, weight="bold"))
@@ -68,12 +68,24 @@ class App(customtkinter.CTk):
         self.frame_3_button.grid(row=4, column=0, sticky="ew")
         self.frame_3_button.bind("<Button-1>", self.toggle_submenu_2)
 
+        ###############################################################
+        
+        self.home_button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=60, border_spacing=10, text="ajouter un utilisateur",
+                                                   fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
+                                                   image=self.add_user_image, anchor="w", command=self.add_user_event)
+        self.home_button.grid(row=6, column=0, sticky="ew")
+        # self.frame_3_button.bind("<Button-1>", self.toggle_submenu_2)
+        
 
         # create home frame
         self.home_frame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.home_frame.grid_columnconfigure(0, weight=1)
         self.home_frame_large_image_label = customtkinter.CTkLabel(self.home_frame,font=("Arial", 20),text_color=blue_color, text="tableau de board".upper())
         self.home_frame_large_image_label.grid(row=0, column=0, padx=20, pady=40)
+        #################################################
+        add_user.add_user_frame(self)
+
+        ####################################
 
 
         # create ajouter_p_frame 
@@ -95,6 +107,10 @@ class App(customtkinter.CTk):
         # create rechercher_p_frame 
 
         pieces_forms.rechercher_fun(self)
+
+
+
+        pieces_forms.prevision_fun(self)
 
 ##################################################################################################################################
 #=================================================================================================================================
@@ -156,6 +172,12 @@ class App(customtkinter.CTk):
                                                    text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"), anchor="w", command=self.rechercher_p_event)
         self.sub1_option_5.grid(row=4, column=0, sticky="ew")
 
+        
+        self.sub1_option_6 = customtkinter.CTkButton(self.submenu_frame_1, corner_radius=0, width=200, height=60, border_spacing=15,
+                                                   text="prevision", fg_color="transparent",
+                                                   text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"), anchor="w", command=self.prevision_p_event)
+        self.sub1_option_6.grid(row=4, column=0, sticky="ew")
+
 
         # Create the sub-menu options (hidden by default)
        
@@ -189,6 +211,12 @@ class App(customtkinter.CTk):
                                                    text="rechercher", fg_color="transparent",
                                                    text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"), anchor="w", command=self.rechercher_c_event)
         self.sub2_option_5.grid(row=4, column=0, sticky="ew")
+
+    
+
+
+
+
 
     def toggle_submenu_1(self, event):
         if self.submenu_frame_1.winfo_ismapped():
@@ -273,10 +301,21 @@ class App(customtkinter.CTk):
             self.rechercher_c_frame.grid(row=0, column=1, sticky="nsew")
         else:
             self.rechercher_c_frame.grid_forget()
+        if name == "prevision_p_frame":
+            self.prevision_p_frame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.prevision_p_frame.grid_forget()
+        if name == "add_user_frame":
+            self.add_user_frame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.add_user_frame.grid_forget()
 
 
     def home_event(self):
         self.select_frame_by_name("home")
+
+    def add_user_event(self):
+        self.select_frame_by_name("add_user_frame")
 
     def liste_p_event(self):
         self.select_frame_by_name("liste_p_frame")
@@ -288,6 +327,9 @@ class App(customtkinter.CTk):
         self.select_frame_by_name("supprimer_p_frame")
     def rechercher_p_event(self):
         self.select_frame_by_name("rechercher_p_frame")
+
+    def prevision_p_event(self):
+        self.select_frame_by_name("prevision_p_frame")
 
 
     def liste_c_event(self):
